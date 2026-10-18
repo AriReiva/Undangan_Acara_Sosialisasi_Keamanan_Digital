@@ -199,7 +199,7 @@
                 <i class="fa-solid fa-key"></i> BUKA DOKUMEN UNDANGAN
             </button>
             <p class="text-[11px] text-slate-500 mt-3">
-                <i class="fa-solid fa-lock text-cyberCyan mr-1"></i> Gratis & Terbuka Untuk Seluruh Warga RT 03
+                <i class="fa-solid fa-lock text-cyberCyan mr-1"></i> Gratis & Terbuka Untuk Seluruh Warga RW 01
             </p>
         </div>
     </div>
@@ -288,7 +288,7 @@
                             <i class="fa-solid fa-calendar-day text-cyberCyan mt-1"></i>
                             <div>
                                 <p class="font-bold text-white">Minggu, 25 Oktober 2026</p>
-                                <p class="text-xs text-slate-400">Jadwal Pertemuan Warga RT 03</p>
+                                <p class="text-xs text-slate-400">Jadwal Pertemuan Warga RW 01</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-3">
@@ -319,11 +319,11 @@
                     <div class="space-y-1.5 text-xs sm:text-sm text-slate-300">
                         <p class="font-bold text-white text-base">Kediaman Bapak RT 03</p>
                         <p class="text-slate-300 leading-relaxed text-xs">
-                            Jl. Saen Bantargebang No.152, RT.003/RW.001, Bantargebang, Kec. Bantar Gebang, Kota Bekasi, Jawa Barat 17151
+                            Jl. Saen Bantargebang, RT.003/RW.001, Bantargebang, Kec. Bantar Gebang, Kota Bekasi, Jawa Barat 17151
                         </p>
                     </div>
 
-                    <a href="https://maps.google.com/?q=Jl.+Saen+Bantargebang+No.152+Bekasi" target="_blank" class="mt-6 w-full py-2.5 rounded-xl bg-cyberCyan text-darkBg text-xs font-bold flex items-center justify-center gap-2 hover:bg-white transition-all shadow-md shadow-cyberCyan/10">
+                    <a href="https://www.google.com/maps/place/6%C2%B018'40.6%22S+106%C2%B058'59.2%22E/@-6.3112276,106.9823154,18z/data=!4m4!3m3!8m2!3d-6.311273!4d106.983111?entry=ttu&g_ep=EgoyMDI2MTAxMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="mt-6 w-full py-2.5 rounded-xl bg-cyberCyan text-darkBg text-xs font-bold flex items-center justify-center gap-2 hover:bg-white transition-all shadow-md shadow-cyberCyan/10">
                         <i class="fa-solid fa-map-location-dot"></i> Buka di Google Maps
                     </a>
                 </div>
@@ -651,7 +651,7 @@
                 "Mari hadir dalam acara sosialisasi pencegahan penipuan online, pinjol ilegal, dan perlindungan data KTP.\n\n" +
                 "🗓 *Hari/Tgl:* Minggu, 25 Oktober 2026\n" +
                 "⏰ *Waktu:* 19.00 – 20.30 WIB\n" +
-                "📍 *Tempat:* Kediaman Bapak RT 03 (Jl. Saen Bantargebang No.152)\n\n" +
+                "📍 *Tempat:* Kediaman Bapak RT 03 (Jl. Saen Bantargebang)\n\n" +
                 "Buka tautan undangan digital lengkap di sini."
             );
             window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
@@ -659,9 +659,9 @@
 
         // Google Calendar Generator
         function addToCalendar() {
-            const title = encodeURIComponent("Sosialisasi Keamanan Digital & Privasi RT 03");
+            const title = encodeURIComponent("Sosialisasi Keamanan Digital & Privasi RW 01");
             const details = encodeURIComponent("Edukasi pencegahan penipuan online, pinjol ilegal, dan perlindungan KTP warga.");
-            const location = encodeURIComponent("Kediaman Bapak RT 03, Jl. Saen Bantargebang No.152, RT 003/RW 001, Bekasi");
+            const location = encodeURIComponent("Kediaman Bapak RT 03, Jl. Saen Bantargebang, RT 003/RW 001, Bekasi");
             
             // ISO Date String for 25 Oct 2026 19:00 - 20:30 WIB (12:00 - 13:30 UTC)
             const calUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=20261025T120000Z/20261025T133000Z&details=${details}&location=${location}`;
