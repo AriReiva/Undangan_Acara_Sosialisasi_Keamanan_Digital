@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Sosialisasi Keamanan Digital & Data Pribadi</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#080C14',
+                        cardBg: '#0F172A',
+                        cardBorder: '#1E293B',
+                        cyberCyan: '#00F0FF',
+                        cyberBlue: '#3B82F6',
+                        neonEmerald: '#10B981',
+                        accentViolet: '#8B5CF6'
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        tech: ['"Space Grotesk"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Cyberpunk Grid and Background Glows */
+        .bg-cyber-grid {
+            background-size: 36px 36px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 240, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 10px rgba(0, 240, 255, 0.1); }
+            50% { box-shadow: 0 0 35px rgba(0, 240, 255, 0.7), inset 0 0 20px rgba(0, 240, 255, 0.3); }
+        }
+
+        @keyframes floatAnim {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
+        }
+
+        .neon-glow {
+            animation: pulseGlow 3s infinite;
+        }
+
+        .floating {
+            animation: floatAnim 4s ease-in-out infinite;
+        }
+
+        /* 3D Interactive Envelope Styling */
+        .envelope-container {
+            perspective: 1000px;
+        }
+
+        .envelope {
+            position: relative;
+            width: 310px;
+            height: 210px;
+            background: #0F172A;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 240, 255, 0.4);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(0, 240, 255, 0.2);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        @media (min-width: 640px) {
+            .envelope {
+                width: 420px;
+                height: 270px;
+            }
+        }
+
+        .envelope .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 52%;
+            background: #1E293B;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out;
+            z-index: 5;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.3);
+        }
+
+        .envelope.open .flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .envelope .pocket {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 75%;
+            background: #0F172A;
+            clip-path: polygon(0 100%, 0 0, 50% 45%, 100% 0, 100% 100%);
+            z-index: 4;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            border-top: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        .envelope .letter {
+            position: absolute;
+            bottom: 12px;
+            left: 5%;
+            width: 90%;
+            height: 88%;
+            background: #080C14;
+            border: 1px solid #00F0FF;
+            border-radius: 12px;
+            transition: all 0.8s ease-in-out;
+            z-index: 3;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(0,240,255,0.25);
+        }
+
+        .envelope.open .letter {
+            transform: translateY(-90px) scale(1.04);
+            z-index: 6;
+        }
+
+        /* Reveal Animation Utility */
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-slate-100 font-sans selection:bg-cyberCyan selection:text-darkBg overflow-x-hidden min-h-screen">
+
+    <!-- ============================================================= -->
+    <!-- ENVELOPE OVERLAY VIEW (INITIAL STATE) -->
+    <!-- ============================================================= -->
+    <div id="envelope-overlay" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-darkBg bg-cyber-grid p-4 transition-all duration-1000">
+        <!-- Security Floating Background Particles -->
+        <div class="absolute inset-0 pointer-events-none overflow-hidden opacity-30" id="particles-bg"></div>
+
+        <div class="text-center mb-6 reveal active">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyberCyan/10 border border-cyberCyan/30 text-cyberCyan text-xs font-semibold tracking-wider uppercase mb-3 floating">
+                <i class="fa-solid fa-shield-halved"></i> Undangan Resmi Sosialisasi
+            </span>
+            <h1 class="text-2xl sm:text-4xl font-extrabold font-tech text-white tracking-wide">
+                KEAMANAN <span class="text-cyberCyan">DIGITAL</span> & PRIVASI
+            </h1>
+            <p class="text-slate-400 text-xs sm:text-sm mt-2 max-w-md mx-auto">
+                Khusus Warga RT 003 / RW 001 Bantargebang. Klik amplop untuk membuka dokumen sosialisasi.
+            </p>
+        </div>
+
+        <!-- Envelope Component -->
+        <div class="envelope-container cursor-pointer my-4" id="envelope-btn" onclick="openInvitation()">
+            <div class="envelope" id="envelope-el">
+                <div class="flap"></div>
+                <div class="pocket"></div>
+                <div class="letter text-center">
+                    <div class="w-11 h-11 rounded-full bg-cyberCyan/20 text-cyberCyan flex items-center justify-center mx-auto mb-2 border border-cyberCyan">
+                        <i class="fa-solid fa-envelope-open-text text-lg"></i>
+                    </div>
+                    <p class="font-tech text-xs text-cyberCyan font-bold tracking-widest uppercase">Buka Undangan</p>
+                    <p class="text-[10px] text-slate-300 mt-1">Minggu, 25 Okt 2026 • 19.00 WIB</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <button onclick="openInvitation()" class="neon-glow px-8 py-3.5 rounded-full bg-cyberCyan text-darkBg font-bold font-tech text-xs sm:text-sm tracking-wider hover:bg-white transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2.5 mx-auto shadow-lg shadow-cyberCyan/20">
+                <i class="fa-solid fa-key"></i> BUKA DOKUMEN UNDANGAN
+            </button>
+            <p class="text-[11px] text-slate-500 mt-3">
+                <i class="fa-solid fa-lock text-cyberCyan mr-1"></i> Gratis & Terbuka Untuk Seluruh Warga RT 03
+            </p>
+        </div>
+    </div>
+
+
+    <!-- ============================================================= -->
+    <!-- MAIN INVITATION CONTENT (HIDDEN INITIALLY) -->
+    <!-- ============================================================= -->
+    <div id="main-content" class="hidden opacity-0 transition-opacity duration-1000 bg-cyber-grid min-h-screen">
+        
+        <!-- Sticky Header Bar -->
+        <header class="sticky top-0 z-40 bg-darkBg/90 backdrop-blur-md border-b border-cardBorder px-4 py-3">
+            <div class="max-w-5xl mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg bg-cyberCyan/20 border border-cyberCyan text-cyberCyan flex items-center justify-center">
+                        <i class="fa-solid fa-user-shield text-sm"></i>
+                    </div>
+                    <span class="font-tech font-bold text-xs sm:text-sm tracking-wide text-white">LITERASI<span class="text-cyberCyan">DIGITAL</span></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="shareWhatsApp()" class="hidden sm:inline-flex px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 text-xs font-semibold hover:bg-emerald-500 hover:text-darkBg transition-all items-center gap-1.5">
+                        <i class="fa-brands fa-whatsapp text-sm"></i> Sebar WA
+                    </button>
+                    <a href="#rsvp" class="px-3.5 py-1.5 rounded-full bg-cyberCyan/10 border border-cyberCyan text-cyberCyan text-xs font-bold hover:bg-cyberCyan hover:text-darkBg transition-all">
+                        <i class="fa-solid fa-paper-plane mr-1"></i> Form RSVP
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="pt-10 pb-12 px-4 text-center max-w-4xl mx-auto">
+            <div class="reveal">
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold tracking-wider uppercase mb-5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Kegiatan Edukasi Komunitas
+                </span>
+
+                <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold font-tech text-white leading-tight mb-4">
+                    Sosialisasi Meningkatkan Kesadaran Masyarakat Terhadap <br class="hidden sm:inline">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyberCyan via-blue-400 to-neonEmerald">Keamanan Digital, Data Pribadi, & Pencegahan Penipuan Online</span>
+                </h1>
+
+                <p class="text-slate-300 text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed mb-8">
+                    Edukasi praktis bagi warga dalam melindungi identitas <strong class="text-cyberCyan">KTP</strong>, menghindari jeratan <strong class="text-cyberCyan">Pinjol Ilegal</strong>, serta mengantisipasi pembajakan kode <strong class="text-cyberCyan">OTP & Phishing</strong>.
+                </p>
+
+                <!-- Live Countdown Timer Card -->
+                <div class="bg-cardBg/90 border border-cyberCyan/30 rounded-2xl p-5 sm:p-6 shadow-2xl backdrop-blur-md max-w-lg mx-auto my-6 neon-glow">
+                    <p class="text-[11px] font-tech text-cyberCyan font-semibold uppercase tracking-widest mb-3 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-stopwatch text-sm animate-pulse"></i> Hitung Mundur Acara
+                    </p>
+                    <div class="grid grid-cols-4 gap-2 text-center" id="countdown">
+                        <div class="bg-darkBg p-2.5 rounded-xl border border-cardBorder">
+                            <span class="block text-xl sm:text-3xl font-extrabold font-tech text-white" id="cd-days">00</span>
+                            <span class="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-wider">Hari</span>
+                        </div>
+                        <div class="bg-darkBg p-2.5 rounded-xl border border-cardBorder">
+                            <span class="block text-xl sm:text-3xl font-extrabold font-tech text-white" id="cd-hours">00</span>
+                            <span class="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-wider">Jam</span>
+                        </div>
+                        <div class="bg-darkBg p-2.5 rounded-xl border border-cardBorder">
+                            <span class="block text-xl sm:text-3xl font-extrabold font-tech text-white" id="cd-minutes">00</span>
+                            <span class="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-wider">Menit</span>
+                        </div>
+                        <div class="bg-darkBg p-2.5 rounded-xl border border-cardBorder">
+                            <span class="block text-xl sm:text-3xl font-extrabold font-tech text-cyberCyan" id="cd-seconds">00</span>
+                            <span class="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-wider">Detik</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Event Detail Info Cards -->
+        <section class="py-6 px-4 max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                
+                <!-- Date & Time Info -->
+                <div class="bg-cardBg border border-cardBorder rounded-2xl p-6 hover:border-cyberCyan/40 transition-all reveal">
+                    <div class="w-11 h-11 rounded-xl bg-cyberCyan/10 border border-cyberCyan/30 text-cyberCyan flex items-center justify-center mb-4 text-lg">
+                        <i class="fa-regular fa-calendar-check"></i>
+                    </div>
+                    <h3 class="font-tech font-bold text-base text-white mb-3">Waktu & Tanggal Pelaksanaan</h3>
+                    <div class="space-y-3 text-xs sm:text-sm text-slate-300">
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-calendar-day text-cyberCyan mt-1"></i>
+                            <div>
+                                <p class="font-bold text-white">Minggu, 25 Oktober 2026</p>
+                                <p class="text-xs text-slate-400">Jadwal Pertemuan Warga RT 03</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i class="fa-regular fa-clock text-cyberCyan mt-1"></i>
+                            <div>
+                                <p class="font-bold text-cyberCyan text-base">19.00 – 20.30 WIB</p>
+                                <p class="text-xs text-slate-400">Durasi padat 90 Menit (Malam Minggu)</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2.5 mt-6">
+                        <button onclick="addToCalendar()" class="w-full py-2.5 rounded-xl bg-darkBg border border-cardBorder hover:border-cyberCyan text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
+                            <i class="fa-regular fa-bookmark text-cyberCyan"></i> Simpan Kalender
+                        </button>
+                        <button onclick="shareWhatsApp()" class="w-full py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500 hover:text-darkBg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
+                            <i class="fa-brands fa-whatsapp"></i> Sebar di WA
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Venue Info -->
+                <div class="bg-cardBg border border-cardBorder rounded-2xl p-6 hover:border-cyberCyan/40 transition-all reveal">
+                    <div class="w-12 h-12 rounded-xl bg-cyberCyan/10 border border-cyberCyan/30 text-cyberCyan flex items-center justify-center mb-4 text-lg">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <h3 class="font-tech font-bold text-base text-white mb-2">Lokasi Tempat Acara</h3>
+                    <div class="space-y-1.5 text-xs sm:text-sm text-slate-300">
+                        <p class="font-bold text-white text-base">Kediaman Bapak RT 03</p>
+                        <p class="text-slate-300 leading-relaxed text-xs">
+                            Jl. Saen Bantargebang No.152, RT.003/RW.001, Bantargebang, Kec. Bantar Gebang, Kota Bekasi, Jawa Barat 17151
+                        </p>
+                    </div>
+
+                    <a href="https://maps.google.com/?q=Jl.+Saen+Bantargebang+No.152+Bekasi" target="_blank" class="mt-6 w-full py-2.5 rounded-xl bg-cyberCyan text-darkBg text-xs font-bold flex items-center justify-center gap-2 hover:bg-white transition-all shadow-md shadow-cyberCyan/10">
+                        <i class="fa-solid fa-map-location-dot"></i> Buka di Google Maps
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Interactive 90-Minute Agenda Timeline -->
+        <section class="py-8 px-4 max-w-4xl mx-auto">
+            <div class="bg-cardBg border border-cyberCyan/20 rounded-2xl p-6 sm:p-8 backdrop-blur-md shadow-xl reveal">
+                <div class="text-center mb-6">
+                    <span class="text-xs font-tech text-cyberCyan uppercase tracking-widest">Jadwal Efektif (90 Menit)</span>
+                    <h2 class="text-xl sm:text-2xl font-extrabold font-tech text-white mt-1">Susunan Acara Sosialisasi</h2>
+                </div>
+
+                <div class="space-y-3">
+                    <!-- Item 1 -->
+                    <div class="p-3.5 rounded-xl bg-darkBg border border-cardBorder hover:border-cyberCyan/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-md bg-cyberCyan/10 text-cyberCyan font-tech text-xs font-bold whitespace-nowrap">19.00 - 19.10</span>
+                            <h4 class="text-xs sm:text-sm font-bold text-white">Registrasi, Pre-Test & Pembukaan MC <span class="text-slate-400 font-normal">(10')</span></h4>
+                        </div>
+                        <span class="text-[11px] text-slate-400 sm:text-right">Pembagian modul & brosur edukasi</span>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="p-3.5 rounded-xl bg-darkBg border border-cardBorder hover:border-cyberCyan/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-md bg-cyberCyan/10 text-cyberCyan font-tech text-xs font-bold whitespace-nowrap">19.10 - 19.15</span>
+                            <h4 class="text-xs sm:text-sm font-bold text-white">Sambutan Ketua Pelaksana <span class="text-slate-400 font-normal">(5')</span></h4>
+                        </div>
+                        <span class="text-[11px] text-slate-400 sm:text-right">Pengantar maksud & tujuan sosialisasi</span>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="p-3.5 rounded-xl bg-darkBg border border-cyberCyan/30 bg-cyberCyan/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-md bg-cyberCyan text-darkBg font-tech text-xs font-extrabold whitespace-nowrap">19.15 - 19.45</span>
+                            <div>
+                                <h4 class="text-xs sm:text-sm font-bold text-cyberCyan">Pemaparan Materi Utama <span class="text-slate-300 font-normal">(30')</span></h4>
+                                <p class="text-[11px] text-slate-400">Bahaya Pinjol Ilegal, Pencurian KTP, Pembajakan OTP & UU PDP</p>
+                            </div>
+                        </div>
+                        <span class="text-[11px] text-cyberCyan font-semibold">Sesi Inti</span>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="p-3.5 rounded-xl bg-darkBg border border-cyberCyan/30 bg-cyberCyan/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-md bg-cyberCyan text-darkBg font-tech text-xs font-extrabold whitespace-nowrap">19.45 - 20.05</span>
+                            <div>
+                                <h4 class="text-xs sm:text-sm font-bold text-cyberCyan">Praktik Langsung <span class="text-slate-300 font-normal">(20')</span></h4>
+                                <p class="text-[11px] text-slate-400">Cara buat Watermark KTP Digital & Cek Akses Izin HP</p>
+                            </div>
+                        </div>
+                        <span class="text-[11px] text-cyberCyan font-semibold">Demo HP</span>
+                    </div>
+
+                    <!-- Item 5 -->
+                    <div class="p-3.5 rounded-xl bg-darkBg border border-cardBorder hover:border-cyberCyan/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-md bg-cyberCyan/10 text-cyberCyan font-tech text-xs font-bold whitespace-nowrap">20.05 - 20.20</span>
+                            <h4 class="text-xs sm:text-sm font-bold text-white">Tanya Jawab & Simulasi Pelaporan <span class="text-slate-400 font-normal">(15')</span></h4>
+                        </div>
+                        <span class="text-[11px] text-slate-400 sm:text-right">Alur Lapor OJK, Polisi, Komdigi</span>
+                    </div>
+
+                    <!-- Item 6 -->
+                    <div class="p-3.5 rounded-xl bg-darkBg border border-cardBorder hover:border-cyberCyan/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-md bg-cyberCyan/10 text-cyberCyan font-tech text-xs font-bold whitespace-nowrap">20.20 - 20.30</span>
+                            <h4 class="text-xs sm:text-sm font-bold text-white">Post-Test, Doorprize & Penutupan <span class="text-slate-400 font-normal">(10')</span></h4>
+                        </div>
+                        <span class="text-[11px] text-slate-400 sm:text-right">Foto bersama & pembagian snack</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Educational Highlights Section -->
+        <section class="py-8 px-4 max-w-5xl mx-auto">
+            <div class="text-center mb-8 reveal">
+                <span class="text-xs font-tech text-cyberCyan uppercase tracking-widest">Edukasi Ringkas</span>
+                <h2 class="text-xl sm:text-3xl font-extrabold font-tech text-white mt-1">3 Langkah Lindungi Diri Anda</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- Tip 1 -->
+                <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 hover:border-cyberCyan/50 transition-all reveal">
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-base mb-3 border border-blue-500/30">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                    <h3 class="font-bold text-white text-sm mb-1.5">1. Beri Watermark KTP</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Saat mengunggah/mengirim foto KTP, tuliskan keterangan di atas KTP secara jelas (Contoh: <em>"HANYA UNTUK VERIFIKASI BANK X TGL 25/10/26"</em>).
+                    </p>
+                </div>
+
+                <!-- Tip 2 -->
+                <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 hover:border-cyberCyan/50 transition-all reveal">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-base mb-3 border border-amber-500/30">
+                        <i class="fa-solid fa-shield-virus"></i>
+                    </div>
+                    <h3 class="font-bold text-white text-sm mb-1.5">2. Waspada Berkas .APK</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Jangan pernah mengklik atau mengunduh berkas bertipe <code>.APK</code> yang dikirim melalui WhatsApp (seperti modus 'Undangan Pernikahan' / 'Resi Paket').
+                    </p>
+                </div>
+
+                <!-- Tip 3 -->
+                <div class="bg-cardBg border border-cardBorder rounded-2xl p-5 hover:border-cyberCyan/50 transition-all reveal">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-base mb-3 border border-emerald-500/30">
+                        <i class="fa-solid fa-phone-volume"></i>
+                    </div>
+                    <h3 class="font-bold text-white text-sm mb-1.5">3. Kontak Darurat Resmi</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Jika terjerat Pinjol Ilegal atau kecurian data, hubungi <strong class="text-white">OJK (157)</strong>, Lapor ke <strong class="text-white">Bareskrim Polri</strong>, atau aduan ke Komdigi.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- RSVP Form & Live Guestbook Section -->
+        <section id="rsvp" class="py-10 px-4 max-w-4xl mx-auto">
+            <div class="bg-cardBg border border-cyberCyan/30 rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-2xl reveal">
+                <div class="text-center mb-6">
+                    <span class="text-xs font-tech text-cyberCyan uppercase tracking-widest">Konfirmasi Kehadiran</span>
+                    <h2 class="text-xl sm:text-3xl font-extrabold font-tech text-white mt-1">RSVP Warga & Pesan</h2>
+                    <p class="text-xs text-slate-400 mt-1">Silakan isi formulir di bawah ini untuk membantu rekapitulasi konsumsi & tempat.</p>
+                </div>
+
+                <!-- RSVP Form -->
+                <form id="rsvpForm" onsubmit="submitRSVP(event)" class="space-y-4 max-w-xl mx-auto">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Nama Lengkap</label>
+                        <input type="text" id="rsvp-name" required placeholder="Contoh: Pak Budi / Ibu Maria" class="w-full px-4 py-2.5 rounded-xl bg-darkBg border border-cardBorder text-white text-xs sm:text-sm focus:outline-none focus:border-cyberCyan transition-all">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">RT / RW</label>
+                            <input type="text" id="rsvp-rt" required placeholder="RT 03 / RW 01" class="w-full px-4 py-2.5 rounded-xl bg-darkBg border border-cardBorder text-white text-xs sm:text-sm focus:outline-none focus:border-cyberCyan transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Konfirmasi Kehadiran</label>
+                            <select id="rsvp-status" class="w-full px-4 py-2.5 rounded-xl bg-darkBg border border-cardBorder text-white text-xs sm:text-sm focus:outline-none focus:border-cyberCyan transition-all">
+                                <option value="Hadir">Hadir Langsung</option>
+                                <option value="Ragu-Ragu">Masih Ragu-Ragu</option>
+                                <option value="Tidak Hadir">Tidak Dapat Hadir</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Pesan / Pertanyaan Awal (Opsional)</label>
+                        <textarea id="rsvp-message" rows="3" placeholder="Tuliskan pertanyaan tentang kasus kebocoran KTP / pinjol..." class="w-full px-4 py-2.5 rounded-xl bg-darkBg border border-cardBorder text-white text-xs sm:text-sm focus:outline-none focus:border-cyberCyan transition-all"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 rounded-xl bg-cyberCyan text-darkBg font-bold font-tech text-xs sm:text-sm tracking-wider hover:bg-white transition-all shadow-lg shadow-cyberCyan/20 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> KIRIM KONFIRMASI
+                    </button>
+                </form>
+
+                <!-- Live Guestbook Feed -->
+                <div class="mt-10 border-t border-cardBorder pt-6">
+                    <h3 class="font-tech font-bold text-sm text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-comments text-cyberCyan"></i> Daftar Kehadiran Warga (<span id="guest-count">2</span>)
+                    </h3>
+                    <div id="guestbook-list" class="space-y-3 max-h-60 overflow-y-auto pr-2">
+                        <!-- Sample Posts -->
+                        <div class="p-3 rounded-xl bg-darkBg border border-cardBorder text-xs space-y-1">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-cyberCyan">Bapak Supriyanto (RT 03)</span>
+                                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-semibold">Hadir</span>
+                            </div>
+                            <p class="text-slate-300 text-[11px]">Sangat mendukung acara ini, akhir-akhir ini marak penipuan foto KTP di lingkungan kita.</p>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-darkBg border border-cardBorder text-xs space-y-1">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-cyberCyan">Ibu Rahmawati (RT 03)</span>
+                                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-semibold">Hadir</span>
+                            </div>
+                            <p class="text-slate-300 text-[11px]">InsyaAllah siap hadir jam 19.00 tepat.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-8 text-center text-xs text-slate-500 border-t border-cardBorder">
+            <p>© 2026 Tim Proyek Sosialisasi Keamanan Digital • RT 003 / RW 001 Bantargebang Bekasi</p>
+            <p class="text-[10px] text-slate-600 mt-1">Dibuat khusus untuk peningkatan literasi siber masyarakat</p>
+        </footer>
+
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- JAVASCRIPT INTERACTION LOGIC -->
+    <!-- ============================================================= -->
+    <script>
+        // Target Date: Sunday, October 25, 2026 19:00 WIB
+        const targetDate = new Date("October 25, 2026 19:00:00 GMT+0700").getTime();
+
+        // Open Envelope Function
+        function openInvitation() {
+            const envelope = document.getElementById("envelope-el");
+            const overlay = document.getElementById("envelope-overlay");
+            const mainContent = document.getElementById("main-content");
+
+            envelope.classList.add("open");
+
+            setTimeout(() => {
+                overlay.classList.add("opacity-0");
+                setTimeout(() => {
+                    overlay.classList.add("hidden");
+                    mainContent.classList.remove("hidden");
+                    setTimeout(() => {
+                        mainContent.classList.remove("opacity-0");
+                        initScrollReveal();
+                    }, 50);
+                }, 800);
+            }, 700);
+        }
+
+        // Live Countdown Clock Logic
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById("countdown").innerHTML = "<p class='text-cyberCyan font-tech font-bold text-sm col-span-4'>ACARA SEDANG / TELAH BERLANGSUNG</p>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("cd-days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("cd-hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("cd-minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("cd-seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Scroll Reveal Trigger
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll(".reveal");
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("active");
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            reveals.forEach(el => observer.observe(el));
+        }
+
+        // RSVP Form Submission Function
+        function submitRSVP(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("rsvp-name").value;
+            const rt = document.getElementById("rsvp-rt").value;
+            const status = document.getElementById("rsvp-status").value;
+            const message = document.getElementById("rsvp-message").value;
+
+            const guestList = document.getElementById("guestbook-list");
+            const countEl = document.getElementById("guest-count");
+
+            const badgeColor = status === "Hadir" 
+                ? "bg-emerald-500/20 text-emerald-400" 
+                : (status === "Ragu-Ragu" ? "bg-amber-500/20 text-amber-400" : "bg-red-500/20 text-red-400");
+
+            const newPost = document.createElement("div");
+            newPost.className = "p-3 rounded-xl bg-darkBg border border-cyberCyan/40 text-xs space-y-1 transition-all animate-bounce";
+            newPost.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-cyberCyan">${escapeHtml(name)} (${escapeHtml(rt)})</span>
+                    <span class="px-2 py-0.5 rounded ${badgeColor} text-[10px] font-semibold">${status}</span>
+                </div>
+                ${message ? `<p class="text-slate-300 text-[11px]">${escapeHtml(message)}</p>` : ''}
+            `;
+
+            guestList.prepend(newPost);
+
+            let currentCount = parseInt(countEl.innerText);
+            countEl.innerText = currentCount + 1;
+
+            // Reset Form
+            document.getElementById("rsvpForm").reset();
+            alert("Terima kasih! Konfirmasi kehadiran Anda telah tersimpan.");
+        }
+
+        // Helper Utility to prevent XSS
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Share via WhatsApp
+        function shareWhatsApp() {
+            const text = encodeURIComponent(
+                "*UNDANGAN SOSIALISASI KEAMANAN DIGITAL & PRIVASI WARGA*\n\n" +
+                "Yth. Bp/Ibu Warga RT 03 / RW 01 Bantargebang,\n\n" +
+                "Mari hadir dalam acara sosialisasi pencegahan penipuan online, pinjol ilegal, dan perlindungan data KTP.\n\n" +
+                "🗓 *Hari/Tgl:* Minggu, 25 Oktober 2026\n" +
+                "⏰ *Waktu:* 19.00 – 20.30 WIB\n" +
+                "📍 *Tempat:* Kediaman Bapak RT 03 (Jl. Saen Bantargebang No.152)\n\n" +
+                "Buka tautan undangan digital lengkap di sini."
+            );
+            window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+        }
+
+        // Google Calendar Generator
+        function addToCalendar() {
+            const title = encodeURIComponent("Sosialisasi Keamanan Digital & Privasi RT 03");
+            const details = encodeURIComponent("Edukasi pencegahan penipuan online, pinjol ilegal, dan perlindungan KTP warga.");
+            const location = encodeURIComponent("Kediaman Bapak RT 03, Jl. Saen Bantargebang No.152, RT 003/RW 001, Bekasi");
+            
+            // ISO Date String for 25 Oct 2026 19:00 - 20:30 WIB (12:00 - 13:30 UTC)
+            const calUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=20261025T120000Z/20261025T133000Z&details=${details}&location=${location}`;
+            window.open(calUrl, '_blank');
+        }
+
+        // Create Ambient Background Particles for Overlay
+        (function createParticles() {
+            const container = document.getElementById("particles-bg");
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement("div");
+                const size = Math.random() * 4 + 2;
+                particle.style.position = "absolute";
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.background = "#00F0FF";
+                particle.style.borderRadius = "50%";
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.opacity = Math.random() * 0.5 + 0.2;
+                particle.style.animation = `floatAnim ${Math.random() * 5 + 3}s ease-in-out infinite`;
+                container.appendChild(particle);
+            }
+        })();
+    </script>
+</body>
+</html>
